@@ -1,0 +1,57 @@
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      DATABASE_PATH: /data/agentsentinel.db
+      SANDBOX_URL: http://sandbox:8100
+      FRONTEND_ORIGIN: http://localhost:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - sentinel_data:/data
+    depends_on:
+      - sandbox
+    networks:
+      - default
+      - sandbox_net
+    restart: unless-stopped
+
+  sandbox:
+    build: ./sandbox
+    expose:
+      - "8100"
+    read_only: true
+    tmpfs:
+      - /workspace:rw,noexec,nosuid,nodev,size=64m,uid=10001,gid=10001,mode=0700
+      - /tmp:rw,noexec,nosuid,nodev,size=16m,uid=10001,gid=10001,mode=0700
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 64
+    mem_limit: 128m
+    cpus: 0.50
+    networks:
+      - sandbox_net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  sentinel_data:
+
+networks:
+  sandbox_net:
+    internal: true
