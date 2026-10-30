@@ -1,11 +1,14 @@
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.config import settings
-from app.db import initialize, list_events, stats, clear_events
-from app.schemas import ToolCallRequest
-from app.proxy.interceptor import intercept_tool_call
+from app.db import clear_events, initialize, list_events, stats
 from app.demo_agent.scenarios import SCENARIOS
+from app.proxy.interceptor import intercept_tool_call
+from app.schemas import ToolCallRequest
 from app.tools.sandbox_client import reset_sandbox
+
 
 app = FastAPI(title="AgentSentinel API", version="0.1.0",
               description="MVP runtime screening proxy and event recorder.")
