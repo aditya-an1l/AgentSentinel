@@ -2,9 +2,9 @@ import re
 from pathlib import PurePosixPath
 from typing import Any
 
-SECRET_KEY = re.compile(r"(api[_-]?key|token|secret|password|credential|private[_-]?key)", re.I)
+SECRET_KEY = re.compile(r"(api[_-]?key|token|secret|password|credential|private[_-]?key)", re.IGNORECASE)
 SECRET_VALUE = re.compile(r"(?i)(sk-[A-Za-z0-9_-]{12,}|nvapi-[A-Za-z0-9_-]{12,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)")
-DESTRUCTIVE = re.compile(r"(^|[;&|]\s*)(rm\s+-rf\b|mkfs\b|dd\s+if=|shutdown\b|reboot\b|chmod\s+-R\s+777\b|truncate\b)", re.I)
+DESTRUCTIVE = re.compile(r"(^|[;&|]\s*)(rm\s+-rf\b|mkfs\b|dd\s+if=|shutdown\b|reboot\b|chmod\s+-R\s+777\b|truncate\b)", re.IGNORECASE)
 SHELL_META = re.compile(r"[;&|`$<>\\n]")
 SENSITIVE_PATHS = {".env", ".ssh", ".aws", ".config", "id_rsa", "id_ed25519", "credentials", "secrets", "shadow", "passwd"}
 

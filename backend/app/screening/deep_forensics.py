@@ -1,4 +1,5 @@
 from openai import OpenAI
+
 from app.config import settings
 
 
@@ -20,5 +21,5 @@ def analyze(session_id: str, tool: str, arguments: dict, reason: str) -> str:
             ],
         )
         return response.choices[0].message.content or "No analysis content returned."
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001  # intentional broad catch: model failure degrades to unexecuted
         return f"Deep analysis unavailable ({type(exc).__name__}); call remains unexecuted."

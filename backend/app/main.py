@@ -9,7 +9,6 @@ from app.proxy.interceptor import intercept_tool_call
 from app.schemas import ToolCallRequest
 from app.tools.sandbox_client import reset_sandbox
 
-
 app = FastAPI(title="AgentSentinel API", version="0.1.0",
               description="MVP runtime screening proxy and event recorder.")
 app.add_middleware(

@@ -1,5 +1,5 @@
-from app.screening.rules import inspect_call, mock_classification
 from app.proxy.policy import execution_allowed
+from app.screening.rules import inspect_call, mock_classification
 
 
 def test_blocks_destructive_command():

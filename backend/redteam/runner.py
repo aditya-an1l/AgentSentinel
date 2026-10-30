@@ -22,7 +22,7 @@ def main() -> int:
             matches += int(passed)
             print(f"{'PASS' if passed else 'CHECK'} {scenario['id']}: "
                   f"expected={scenario['expected']} actual={actual} executed={result['executed']}")
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001  # intentional broad catch: scenario replay continues on error
             print(f"ERROR {scenario['id']}: {type(exc).__name__}: {exc}")
     print(f"\nObserved scenario matches: {matches}/{len(scenarios)}")
     print("This is a scenario replay summary, not a security benchmark or general detection rate.")

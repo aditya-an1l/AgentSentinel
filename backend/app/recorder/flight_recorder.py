@@ -1,8 +1,9 @@
 import re
 from typing import Any
+
 from app.db import insert_event
 
-SENSITIVE_KEY = re.compile(r"(api[_-]?key|token|secret|password|credential|private[_-]?key)", re.I)
+SENSITIVE_KEY = re.compile(r"(api[_-]?key|token|secret|password|credential|private[_-]?key)", re.IGNORECASE)
 SECRET_VALUE = re.compile(r"(?i)(sk-[A-Za-z0-9_-]{12,}|nvapi-[A-Za-z0-9_-]{12,})")
 
 

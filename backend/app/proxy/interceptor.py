@@ -1,9 +1,10 @@
 import time
 from typing import Any
+
 from app.recorder.flight_recorder import record_event
-from app.screening.rules import inspect_call
-from app.screening.fast_screen import classify
 from app.screening.deep_forensics import analyze
+from app.screening.fast_screen import classify
+from app.screening.rules import inspect_call
 from app.tools.sandbox_client import execute_sandbox
 from app.tools.tavily import search
 
@@ -27,7 +28,7 @@ async def intercept_tool_call(session_id: str, tool: str, arguments: dict[str, A
             executed = True
             if isinstance(result, dict) and result.get("ok") is False:
                 reason = f"Screening passed; tool returned an error: {result.get('error', 'unknown error')}"
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001  # intentional broad catch: tool failure is degraded gracefully
             result = {"ok": False, "error": f"Tool execution failed ({type(exc).__name__})."}
             reason = "Screening passed, but the isolated tool service could not complete the request."
     elif verdict == "confirm":

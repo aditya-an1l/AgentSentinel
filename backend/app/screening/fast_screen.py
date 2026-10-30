@@ -1,6 +1,8 @@
 import json
 import re
+
 from openai import OpenAI
+
 from app.config import settings
 from app.screening.rules import mock_classification
 
@@ -11,7 +13,7 @@ def parse_result(text: str) -> dict:
     try:
         return json.loads(text)
     except json.JSONDecodeError:
-        match = re.search(r"\{.*\}", text, re.S)
+        match = re.search(r"\{.*\}", text, re.DOTALL)
         if not match:
             raise ValueError("Model response did not contain JSON.")
         return json.loads(match.group(0))
@@ -40,5 +42,5 @@ def classify(tool: str, arguments: dict) -> tuple[str, str, str]:
         if verdict not in VALID:
             raise ValueError("Unsupported model verdict.")
         return verdict, str(parsed.get("reason", "No model reason supplied."))[:1000], "nebius"
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001  # intentional broad catch: model failure fails closed (escalate)
         return "escalate", f"Model screening failed closed ({type(exc).__name__}); call held.", "nebius-error"
